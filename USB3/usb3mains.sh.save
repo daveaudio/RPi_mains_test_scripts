@@ -1,0 +1,30 @@
+#!/bin/bash
+
+clear;
+reboot_counter=0;
+delay_val=10
+#text_val=10
+sudo ./relay_init
+sleep 1;
+
+
+until [ 1 -eq 2 ]; do
+	echo ""
+	echo "Reboot counter = $reboot_counter";
+	echo ""
+	sudo ./relay -r 1 -on
+	let string_var=""
+	echo "Waiting for hard drive to become visible..."
+	sleep 2
+	string_var=""
+	u [ $string_var="/dev/sda /dev/sda1" ]; do
+		sleep 1
+		string_var=$(sudo ls /dev/sda*)
+		echo $string_var
+	done
+	echo "HDD found: $string_var"
+	let reboot_counter=reboot_counter+1;
+	sudo ./relay -r 1 -off
+	sleep 5;
+done
+#exit
